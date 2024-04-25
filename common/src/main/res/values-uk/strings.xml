@@ -546,6 +546,7 @@
     <string name="clear_search_history">Видалити історію пошуку</string>
     <string name="remove_from_subscriptions">Приховати</string>
     <string name="player_long_speed_list">Довгий список швидкостей</string>
+    <string name="player_extra_long_speed_list">Дуже довгий список швидкостей</string>
     <string name="alt_app_icon">Альтернативна іконка застосунку (потрібне перезавантаження)</string>
     <string name="network_stack">Надавати перевагу мережевому стеку %s</string>
     <string name="player_network_stack">Мережевий стек</string>
@@ -599,6 +600,7 @@
     <string name="player_global_focus">Безшовна навігація між рядами кнопок плеєра</string>
     <string name="auto_history">Auto (використовувати налаштування облікового запису)</string>
     <string name="remember_position_subscriptions">Запам\'ятовувати останню переглянуту позицію у Підписках</string>
+    <string name="remember_position_pinned">Запам\'ятовувати останню переглянуту позицію у закріплених плейлистах</string>
     <string name="msg_player_unknown_error">Невідома помилка</string>
     <string name="header_notifications">Повідомлення</string>
     <string name="disable_search_history">Вимкнути історію пошуку</string>
@@ -628,7 +630,7 @@
     <string name="channel_filter_hint">Фільтрувати канали</string>
     <string name="player_loop_shorts">Зациклювати короткі відео</string>
     <string name="player_quick_shorts_skip">Перемикати короткі відео кнопками ліво/право</string>
-    <string name="channels_filter">Показати поле пошуку в розділі Канали</string>
+    <string name="channels_filter">Показати поле Фільтрувати канали в розділі Канали</string>
     <string name="channel_search_bar">Панель пошуку на сторінці каналу</string>
     <string name="header_sports">Спорт</string>
     <string name="replace_titles">Замінити назви</string>
@@ -646,4 +648,5 @@
     <string name="pinned_channel_rows">Відображати закріплений канал у вигляді рядків</string>
     <string name="prefer_ipv4">Надавати перевагу IPv4 DNS</string>
     <string name="prefer_ipv4_desc">Може виправити випадки, коли застосунок взагалі не працює.\nУвага. На деяких пристроях можливі падіння застосунку (особливо на Android 8 та пристроях Dune HD)</string>
+    <string name="long_press_for_settings">ТРИВАЛЕ НАТИСКАННЯ ДЛЯ НАЛАШТУВАНЬ</string>
 </resources>

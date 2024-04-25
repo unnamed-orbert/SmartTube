@@ -153,7 +153,9 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
     }
 
     private void speedUp(boolean up) {
-        float[] speedSteps = PlayerTweaksData.instance(mContext).isLongSpeedListEnabled() ? Utils.SPEED_LIST_LONG : Utils.SPEED_LIST_SHORT;
+        PlayerTweaksData data = PlayerTweaksData.instance(mContext);
+        float[] speedSteps = data.isLongSpeedListEnabled() ? Utils.SPEED_LIST_LONG :
+                data.isExtraLongSpeedListEnabled() ? Utils.SPEED_LIST_EXTRA_LONG : Utils.SPEED_LIST_SHORT;
 
         PlaybackView playbackView = getPlaybackView();
 
@@ -179,7 +181,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
         PlaybackView playbackView = getPlaybackView();
 
         if (playbackView != null) {
-            Utils.volumeUpPlayer(mContext, playbackView.getPlayer(), up);
+            Utils.volumeUp(mContext, playbackView.getPlayer(), up);
         }
     }
 

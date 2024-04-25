@@ -211,11 +211,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             options.add(UiOptionItem.from((i + 1) + " " + getContext().getString(nameResId), optionItem -> {
                 if (optionItem.isSelected()) {
                     mMainUIData.setMenuItemIndex(index, menuItem);
+                    dialog.goBack();
 
-                    AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
-                    settingsPresenter.clearBackstack();
-                    appendContextMenuItemsCategory(settingsPresenter);
-                    settingsPresenter.showDialog();
+                    //AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
+                    //settingsPresenter.clearBackstack();
+                    //appendContextMenuItemsCategory(settingsPresenter);
+                    //settingsPresenter.showDialog();
                 }
             }, currentIndex == i));
         }
@@ -506,7 +507,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_only_mode),
+        options.add(UiOptionItem.from(getContext().getString(R.string.return_to_launcher),
                 option -> mGeneralData.enablePlayerOnlyMode(option.isSelected()),
                 mGeneralData.isPlayerOnlyModeEnabled()));
 
@@ -591,6 +592,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_subscriptions),
                 option -> mGeneralData.rememberSubscriptionsPosition(option.isSelected()),
                 mGeneralData.isRememberSubscriptionsPositionEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_pinned),
+                option -> mGeneralData.rememberPinnedPosition(option.isSelected()),
+                mGeneralData.isRememberPinnedPositionEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_screensaver),
                 option -> mGeneralData.disableScreensaver(option.isSelected()),

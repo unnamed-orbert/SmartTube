@@ -92,15 +92,14 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     private boolean mIsSkipShortsEnabled;
     private boolean mIsLiveChatEnabled;
     private FormatItem mLastSubtitleFormat;
-    private final Set<String> mEnabledSubtitlesPerChannel = new LinkedHashSet<>();
+    private List<String> mEnabledSubtitlesPerChannel;
     private boolean mIsSubtitlesPerChannelEnabled;
     private boolean mIsSpeedPerChannelEnabled;
     private final Map<String, SpeedItem> mSpeeds = new HashMap<>();
     private float mPitch;
+    private long mAfrSwitchTimeMs;
 
     private static class SpeedItem {
-        private static final String OBJ_DELIM = "&vi;";
-
         public String channelId;
         public float speed;
 
@@ -110,7 +109,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         }
 
         public static SpeedItem fromString(String specs) {
-            String[] split = Helpers.split(OBJ_DELIM, specs);
+            String[] split = Helpers.splitObj(specs);
 
             if (split == null || split.length != 2) {
                 return new SpeedItem(null, 1);
@@ -122,7 +121,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         @NonNull
         @Override
         public String toString() {
-            return Helpers.merge(OBJ_DELIM, channelId, speed);
+            return Helpers.mergeObj(channelId, speed);
         }
     }
 
@@ -695,6 +694,14 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         persistState();
     }
 
+    public void setAfrSwitchTimeMs(long timeMillis) {
+        mAfrSwitchTimeMs = timeMillis;
+    }
+
+    public long getAfrSwitchTimeMs() {
+        return mAfrSwitchTimeMs;
+    }
+
     @TargetApi(19)
     private void initSubtitleStyles() {
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_white_transparent, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
@@ -722,7 +729,7 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     private void restoreState() {
         String data = mPrefs.getProfileData(VIDEO_PLAYER_DATA);
 
-        String[] split = Helpers.splitObject(data);
+        String[] split = Helpers.splitData(data);
 
         mOKButtonBehavior = Helpers.parseInt(split, 0, ONLY_UI);
         mUiHideTimeoutSec = Helpers.parseInt(split, 1, 3);
@@ -777,7 +784,8 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
         mRepeatMode = Helpers.parseInt(split, 51, PlayerUI.REPEAT_MODE_ALL);
         mAudioLanguage = Helpers.parseStr(split, 52, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
         mSubtitleLanguage = Helpers.parseStr(split, 53, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
-        String enabledSubtitles = Helpers.parseStr(split, 54);
+        //String enabledSubtitles = Helpers.parseStr(split, 54);
+        mEnabledSubtitlesPerChannel = Helpers.parseStrList(split, 54);
         mIsSubtitlesPerChannelEnabled = Helpers.parseBoolean(split, 55, true);
         mIsSpeedPerChannelEnabled = Helpers.parseBoolean(split, 56, true);
         String[] speeds = Helpers.parseArray(split, 57);
@@ -791,16 +799,6 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
             }
         }
 
-        if (enabledSubtitles != null) {
-            String[] channelsArr = Helpers.splitArray(enabledSubtitles);
-
-            mEnabledSubtitlesPerChannel.clear();
-
-            mEnabledSubtitlesPerChannel.addAll(Arrays.asList(channelsArr));
-        } else {
-            mEnabledSubtitlesPerChannel.clear();
-        }
-
         if (!mIsAllSpeedEnabled) {
             mSpeed = 1.0f;
         }
@@ -808,20 +806,18 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
 
     @Override
     protected void persistState() {
-        String enabledSubtitles = Helpers.mergeArray(mEnabledSubtitlesPerChannel.toArray());
-
-        mPrefs.setProfileData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUiHideTimeoutSec, null,
+        mPrefs.setProfileData(VIDEO_PLAYER_DATA, Helpers.mergeData(mOKButtonBehavior, mUiHideTimeoutSec, null,
                 mSeekPreviewMode, mIsSeekConfirmPauseEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
-                Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
+                mVideoFormat, mAudioFormat, mSubtitleFormat,
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs, mIsAllSpeedEnabled, null, null, // didn't remember what was there
                 mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsSpeedPerVideoEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
-                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, Helpers.toString(mLastSubtitleFormat), mLastSpeed, mVideoRotation,
-                mVideoZoom, mRepeatMode, mAudioLanguage, mSubtitleLanguage, enabledSubtitles, mIsSubtitlesPerChannelEnabled,
+                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormat, mLastSpeed, mVideoRotation,
+                mVideoZoom, mRepeatMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled
         ));
 
@@ -832,7 +828,6 @@ public class PlayerData extends DataChangeBase implements PlayerEngineConstants,
     public void onProfileChanged() {
         // reset on profile change
         mSpeeds.clear();
-        mEnabledSubtitlesPerChannel.clear();
 
         restoreState();
     }

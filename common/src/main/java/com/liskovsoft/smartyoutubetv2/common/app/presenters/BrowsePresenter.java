@@ -149,8 +149,21 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void saveSelectedItems() {
-        if (mCurrentVideo != null && mCurrentVideo.belongsToSubscriptions() && mGeneralData.isRememberSubscriptionsPositionEnabled()) {
-            mGeneralData.setSelectedSubscriptionsItem(mCurrentVideo);
+        // Fix position reset when jumping between sections
+        if (mCurrentVideo != null && mCurrentVideo.getPositionInsideGroup() == 0 && (System.currentTimeMillis() - mCurrentVideo.timestamp) < 10_000) {
+            return;
+        }
+
+        if ((isSubscriptionsSection() && mGeneralData.isRememberSubscriptionsPositionEnabled()) ||
+                (isPinnedSection() && mGeneralData.isRememberPinnedPositionEnabled())) {
+            mGeneralData.setSelectedItem(mCurrentSection.getId(), mCurrentVideo);
+        }
+    }
+
+    private void restoreSelectedItems() {
+        if ((isSubscriptionsSection() && mGeneralData.isRememberSubscriptionsPositionEnabled()) ||
+                (isPinnedSection() && mGeneralData.isRememberPinnedPositionEnabled())) {
+            getView().selectSectionItem(mGeneralData.getSelectedItem(mCurrentSection.getId()));
         }
     }
 
@@ -211,7 +224,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         for (Video item : pinnedItems) {
             if (item != null) {
-                if (item.sectionId == -1) {
+                if (item.sectionId == -1) { // pinned channel or playlist
                     BrowseSection section = createPinnedSection(item);
                     mSections.add(section);
                 } else {
@@ -427,8 +440,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public void onSectionFocused(int sectionId) {
-        saveSelectedItems();
-        updateSection(sectionId);
+        saveSelectedItems(); // save previous state
+        mCurrentSection = findSectionById(sectionId);
+        mCurrentVideo = null; // fast scroll through the sections (fix empty selected item)
+        updateCurrentSection();
     }
 
     @Override
@@ -522,6 +537,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     public void unpinItem(Video item) {
         mGeneralData.removePinnedItem(item);
+        mGeneralData.removeSelectedItem(item.hashCode());
 
         BrowseSection section = null;
 
@@ -551,11 +567,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void refresh(boolean focusOnContent) {
-        if (mCurrentSection != null) {
-            updateSection(mCurrentSection.getId());
-            if (focusOnContent && getView() != null) {
-                getView().focusOnContent();
-            }
+        updateCurrentSection();
+        if (focusOnContent && getView() != null) {
+            getView().focusOnContent();
         }
     }
 
@@ -563,10 +577,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mLastUpdateTimeMs = System.currentTimeMillis();
     }
 
-    private void updateSection(int sectionId) {
+    private void updateCurrentSection() {
         disposeActions();
-
-        mCurrentSection = findSectionById(sectionId);
 
         if (getView() == null || mCurrentSection == null) {
             return;
@@ -703,9 +715,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (isSubscriptionsSection() && mGeneralData.isRememberSubscriptionsPositionEnabled()) {
-            getView().selectSectionItem(mGeneralData.getSelectedSubscriptionsItem());
-        }
+        restoreSelectedItems();
 
         Disposable updateAction = group
                 .subscribe(
@@ -991,6 +1001,14 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     public boolean isSubscriptionsSection() {
         return isSection(MediaGroup.TYPE_SUBSCRIPTIONS);
+    }
+
+    public boolean isPinnedSection() {
+        return mCurrentSection != null && isPinnedId(mCurrentSection.getId());
+    }
+
+    private boolean isPinnedId(int id) {
+        return id > 100;
     }
 
     private boolean isSection(int sectionId) {

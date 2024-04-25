@@ -475,6 +475,7 @@
     <string name="action_subscribe_on">Abone ol Açık</string>
     <!-- END Moved strings -->
     <string name="skip_24_rate">24 fps biçimlerini atla (gerçek sinema modu düzeltmesi\?)</string>
+    <string name="skip_shorts">Shortsları atla</string>
     <string name="player_disable_suggestions">Önerileri devre dışı bırak</string>
     <string name="feedback">Geri bildirim</string>
     <string name="sources">Kaynaklar</string>
@@ -553,6 +554,7 @@
     <string name="clear_search_history">Arama geçmişini temizle</string>
     <string name="remove_from_subscriptions">Gizle</string>
     <string name="player_long_speed_list">Uzun oynatma hızı listesi</string>
+    <string name="player_extra_long_speed_list">Ekstra uzun oynatma hızı listesi</string>
     <string name="alt_app_icon">Alternatif uygulama simgesi (yeniden başlatma gerekli)</string>
     <string name="network_stack">%s ağ yığınını tercih et</string>
     <string name="player_network_stack">Ağ yığını</string>
@@ -605,6 +607,7 @@
     <string name="player_global_focus">Oynatıcı düğmesi satırları arasında kusursuz gezinme</string>
     <string name="auto_history">Otomatik (hesap ayarlarını kullan)</string>
     <string name="remember_position_subscriptions">Abonelikler\'de son görüntülenen konumu hatırla</string>
+    <string name="remember_position_pinned">Sabitlenmiş oynatma listelerinde son görüntülenen konumu hatırla</string>
     <string name="msg_player_unknown_error">Bilinmeyen hata</string>
     <string name="header_notifications">Bildirimler</string>
     <string name="disable_search_history">Arama geçmişini devre dışı bırak</string>
@@ -634,7 +637,7 @@
     <string name="channel_filter_hint">Kanalları filtrele</string>
     <string name="player_loop_shorts">Shortsları tekrarla</string>
     <string name="player_quick_shorts_skip">Shortsları sol/sağ düğmeyle atla</string>
-    <string name="channels_filter">Kanallar bölümünde kanal listesi filtreleme</string>
+    <string name="channels_filter">Kanallar bölümü içindeki Kanalları filtrele alanını göster</string>
     <string name="channel_search_bar">Kanal sayfasında arama çubuğu</string>
     <string name="header_sports">Spor</string>
     <string name="keep_finished_activities">Bitmiş etkinlikleri sakla</string>
@@ -654,4 +657,5 @@
     <string name="pinned_channel_rows">Sabitlenmiş kanalı satır olarak göster</string>
     <string name="prefer_ipv4">IPv4 DNS tercih et</string>
     <string name="prefer_ipv4_desc">Uygulamanın hiç çalışmadığı durumları düzeltebilir.\nNot: Takılmalara ve çökmelere neden olabilir (özellikle Android 8 cihazlarda ya da Dune HD\'de)</string>
+    <string name="long_press_for_settings">AYARLAR İÇİN UZUN BASIN</string>
 </resources>

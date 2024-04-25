@@ -546,6 +546,7 @@
     <string name="clear_search_history">Очистить историю поиска</string>
     <string name="remove_from_subscriptions">Скрыть</string>
     <string name="player_long_speed_list">Длинный список скоростей</string>
+    <string name="player_extra_long_speed_list">Очень длинный список скоростей</string>
     <string name="alt_app_icon">Альтернативный значок приложения (требуется перезагрузка)</string>
     <string name="network_stack">Предпочитать сетевой стек %s</string>
     <string name="player_network_stack">Сетевой стек</string>
@@ -599,6 +600,7 @@
     <string name="player_global_focus">Бесшовная навигация между рядами кнопок плеера</string>
     <string name="auto_history">Auto (использовать настройки аккаунта)</string>
     <string name="remember_position_subscriptions">Запоминать последнюю просмотренную позицию в Подписках</string>
+    <string name="remember_position_pinned">Запоминать последнюю просмотренную позицию в закрепленных плейлистах</string>
     <string name="msg_player_unknown_error">Неизвестная ошибка</string>
     <string name="header_notifications">Уведомления</string>
     <string name="disable_search_history">Отключить историю поиска</string>
@@ -628,7 +630,7 @@
     <string name="channel_filter_hint">Фильтровать каналы</string>
     <string name="player_loop_shorts">Зацикливать короткие видео</string>
     <string name="player_quick_shorts_skip">Переключать короткие видео кнопками лево/право</string>
-    <string name="channels_filter">Показывать поле поиска в разделе Каналы</string>
+    <string name="channels_filter">Показывать поле Фильтровать каналы в разделе Каналы</string>
     <string name="channel_search_bar">Панель поиска на странице канала</string>
     <string name="header_sports">Спорт</string>
     <string name="replace_titles">Заменять заголовки</string>
@@ -646,4 +648,5 @@
     <string name="pinned_channel_rows">Отображать закрепленный канал в виде строк</string>
     <string name="prefer_ipv4">Предпочитать IPv4 DNS</string>
     <string name="prefer_ipv4_desc">Можеть исправить случаи, когда приложение вообще не работает.\nВнимание. На некоторых устройствах могут быть вылеты приложения (особенно на Android 8 и приставке Dune HD)</string>
+    <string name="long_press_for_settings">ДЛИТЕЛЬНОЕ НАЖАТИЕ ДЛЯ НАСТРОЕК</string>
 </resources>
