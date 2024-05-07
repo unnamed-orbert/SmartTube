@@ -75,6 +75,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 
@@ -832,9 +833,8 @@ public class Utils {
      * Finish the app but remain running services
      */
     public static void properlyFinishTheApp(Context context) {
-        //ViewManager.instance(context).properlyFinishTheApp(context);
-        //exitToHome(context);
-        forceFinishTheApp();
+        ViewManager.instance(context).properlyFinishTheApp(context);
+        //forceFinishTheApp();
     }
 
     public static void restartTheApp(Context context) {
@@ -935,5 +935,10 @@ public class Utils {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
         Runtime.getRuntime().exit(0);
+    }
+
+    public static String updateTooltip(Context context, String tooltip) {
+        return GeneralData.instance(context).isFirstUseTooltipEnabled() ?
+                String.format("%s (%s)", tooltip, context.getString(R.string.long_press_for_settings)) : tooltip;
     }
 }
