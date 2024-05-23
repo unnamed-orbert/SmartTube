@@ -31,6 +31,7 @@ import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.PowerManager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -489,6 +490,14 @@ public class Utils {
         }
     }
 
+    public static CharSequence color(CharSequence string, int color, int start, int end) {
+        SpannableString spannable = new SpannableString(string);
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(color);
+        spannable.setSpan(foregroundColorSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return spannable;
+    }
+
     public static CharSequence color(CharSequence string, int color) {
         SpannableString spannable = new SpannableString(string);
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(color);
@@ -789,6 +798,20 @@ public class Utils {
         }
 
         return false;
+    }
+
+    public static boolean isHardScreenOff(Context context) {
+        if (context == null) {
+            return false;
+        }
+
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        
+        if (Build.VERSION.SDK_INT < 20) {
+            return !pm.isScreenOn();
+        } else {
+            return !pm.isInteractive();
+        }
     }
 
     public static int getColor(Context context, int colorResId, int dimPercents) {
